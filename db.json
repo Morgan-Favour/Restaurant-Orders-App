@@ -1,0 +1,71 @@
+{
+  "orders": [
+    {
+      "id": "1",
+      "customer": "John Doe",
+      "items": [
+        "Burger",
+        "Fries",
+        "Coke"
+      ],
+      "time": "12:30 PM",
+      "date": "2023-10-01",
+      "status": "Completed"
+    },
+    {
+      "id": "2",
+      "customer": "Jane Smith",
+      "items": [
+        "Pizza",
+        "Water"
+      ],
+      "time": "1:00 PM",
+      "date": "2023-10-01",
+      "status": "Completed"
+    },
+    {
+      "id": "3",
+      "customer": "Mike Johnson",
+      "items": [
+        "Pasta",
+        "Wine"
+      ],
+      "time": "1:45 PM",
+      "date": "2023-10-01",
+      "status": "Completed"
+    },
+    {
+      "id": "4",
+      "customer": "Mike Johnson",
+      "items": [
+        "Pasta",
+        "Wine"
+      ],
+      "time": "1:45 PM",
+      "date": "2023-10-01",
+      "status": "Completed"
+    },
+    {
+      "id": "5",
+      "customer": "Mike Johnson",
+      "items": [
+        "Pasta",
+        "Wine"
+      ],
+      "time": "1:45 PM",
+      "date": "2023-10-01",
+      "status": "Completed"
+    },
+    {
+      "id": "6",
+      "customer": "Mike Johnson",
+      "items": [
+        "Pasta",
+        "Wine"
+      ],
+      "time": "1:45 PM",
+      "date": "2023-10-01",
+      "status": "Completed"
+    }
+  ]
+}
