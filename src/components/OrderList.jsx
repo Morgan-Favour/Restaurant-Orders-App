@@ -7,8 +7,8 @@ export default function OrderList({ orders, setOrders, loadMore, hasMore }) {
   const handleCompleteOrder = useCallback(
     async (orderId) => {
       try {
-        const res = await fetch(`/orders/${orderId}`, {
-          method: "PATCH",
+        const res = await fetch(`https://6804a7f279cb28fb3f5b7c04.mockapi.io/orders/${orderId}`, {
+          method: "PUT", // MockAPI uses PUT for updates instead of PATCH
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ status: "Completed" }),
         });
