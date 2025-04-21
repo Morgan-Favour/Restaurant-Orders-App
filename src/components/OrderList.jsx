@@ -1,68 +1,55 @@
 import React, { useCallback } from "react";
-import InfiniteScroll from "react-infinite-scroll-component";
 import OrderCard from "./OrderCard";
 import { toast } from "react-toastify";
+import "../styles.css";
 
-export default function OrderList({ orders, setOrders, loadMore, hasMore }) {
+export default function OrderList({ orders, setOrders }) {
   const handleCompleteOrder = useCallback(
     async (orderId) => {
       try {
+        console.log(`Completing order ID: ${orderId}`);
         const res = await fetch(`https://6804a7f279cb28fb3f5b7c04.mockapi.io/orders/${orderId}`, {
-          method: "PUT", // MockAPI uses PUT for updates instead of PATCH
+          method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ status: "Completed" }),
         });
 
-        if (res.ok) {
-          setOrders((prevOrders) =>
-            prevOrders.map((order) =>
-              order.id === orderId ? { ...order, status: "Completed" } : order
-            )
-          );
-          toast.success("Order marked as Completed!");
-        } else {
-          console.error("Failed to update order");
-          toast.error("Failed to update order!");
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`Failed to update order: Status ${res.status}, ${errorText}`);
         }
+
+        const data = await res.json();
+        console.log("Order updated:", data);
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order.id === orderId ? { ...order, status: "Completed" } : order
+          )
+        );
+        toast.success("Order marked as Completed!");
       } catch (error) {
-        console.error("Error completing order:", error);
-        toast.error("Error completing order!");
+        console.error("Error completing order:", error.message, error.stack);
+        toast.error(`Failed to update order: ${error.message}`);
       }
     },
     [setOrders]
   );
 
   return (
-    <InfiniteScroll
-      dataLength={orders.length}
-      next={loadMore}
-      hasMore={hasMore}
-      loader={
-        <div className="flex justify-center py-4">
-          <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-blue-500"></div>
-        </div>
-      }
-      endMessage={
-        <p className="text-center text-gray-500 py-4">No more orders to load.</p>
-      }
-    >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {orders.length === 0 ? (
-          <p className="col-span-full text-center text-gray-500 text-lg animate-fade-in">
-            No orders found.
-          </p>
-        ) : (
-          orders.map((order, index) => (
-            <div
-              key={order.id}
-              className="transform transition-all duration-500 ease-out"
-              style={{ animation: `fadeInUp 0.5s ease ${index * 0.1}s forwards` }}
-            >
-              <OrderCard order={order} onComplete={() => handleCompleteOrder(order.id)} />
-            </div>
-          ))
-        )}
-      </div>
-    </InfiniteScroll>
+    <div className="order-list">
+      {orders.length === 0 ? (
+        <p className="no-orders">No orders found.</p>
+      ) : (
+        orders.map((order, index) => (
+          <div
+            key={order.id}
+            style={{ animationDelay: `${index * 0.1}s` }}
+            className="animate-fade-in-up"
+          >
+            <OrderCard order={order} onComplete={() => handleCompleteOrder(order.id)} />
+          </div>
+        ))
+      )}
+    </div>
   );
 }

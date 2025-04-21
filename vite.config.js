@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/orders': {
-        target: 'http://localhost:5000',
+        target: 'https://6804a7f279cb28fb3f5b7c04.mockapi.io/orders',
         changeOrigin: true,
         secure: false,
       },

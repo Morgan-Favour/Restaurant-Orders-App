@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
+import "../styles.css";
 
 function OrderDetails({ orders }) {
   const { orderId } = useParams();
@@ -8,45 +9,42 @@ function OrderDetails({ orders }) {
   }, [orders, orderId]);
 
   const statusStyles = useMemo(() => {
-    if (!order) return "";
+    if (!order) return "card-status default";
     switch (order.status) {
       case "Completed":
-        return "bg-green-100 text-green-800";
+        return "card-status completed";
       case "Pending":
-        return "bg-yellow-100 text-yellow-800";
+        return "card-status pending";
       case "Preparing":
-        return "bg-blue-100 text-blue-800";
+        return "card-status preparing";
       case "Delivered":
-        return "bg-purple-100 text-purple-800";
+        return "card-status delivered";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "card-status default";
     }
   }, [order]);
 
   if (!order) {
     return (
-      <div className="p-6 text-center text-gray-500 text-lg animate-fade-in">
+      <div className="no-orders">
         Order not found!
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="bg-white shadow-xl rounded-xl p-8 max-w-lg w-full animate-fade-in-up">
-        <h2 className="text-3xl font-bold mb-6 text-red-600 flex items-center gap-2">
-          🍽️ Order #{order.id}
-        </h2>
+    <div className="details-container">
+      <div className="details-card animate-fade-in-up">
+        <h2 className="details-title">🍽️ Order #{order.id}</h2>
 
-        <div className="space-y-4">
+        <div className="details-content">
           <div>
-            <strong className="text-gray-700">Customer:</strong>{" "}
-            <span className="text-gray-600">{order.customer}</span>
+            <strong>Customer:</strong> <span>{order.customer}</span>
           </div>
 
           <div>
-            <strong className="text-gray-700">Items Ordered:</strong>
-            <ul className="list-disc ml-6 text-gray-600">
+            <strong>Items Ordered:</strong>
+            <ul className="details-list">
               {order.items.map((item, index) => (
                 <li key={index}>{item}</li>
               ))}
@@ -54,24 +52,15 @@ function OrderDetails({ orders }) {
           </div>
 
           <div>
-            <strong className="text-gray-700">Order Time:</strong>{" "}
-            <span className="text-gray-600">{order.time}</span>
+            <strong>Order Time:</strong> <span>{order.time}</span>
           </div>
 
           <div>
-            <strong className="text-gray-700">Status:</strong>{" "}
-            <span
-              className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${statusStyles}`}
-            >
-              {order.status}
-            </span>
+            <strong>Status:</strong> <span className={statusStyles}>{order.status}</span>
           </div>
         </div>
 
-        <Link
-          to="/"
-          className="mt-6 inline-block px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 text-sm font-medium transition-all"
-        >
+        <Link to="/" className="link">
           ⬅ Back to Orders
         </Link>
       </div>
