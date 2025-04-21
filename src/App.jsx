@@ -14,22 +14,23 @@ export default function App() {
   const [hasMore, setHasMore] = useState(true);
   const limit = 10; // Number of orders per page
 
-  const fetchOrders = useCallback(async (pageNum, append = false) => {
-    try {
-      const res = await fetch(`/orders?_page=${pageNum}&_limit=${limit}`);
-      if (!res.ok) {
-        throw new Error(`HTTP error! Status: ${res.status}`);
-      }
-      const data = await res.json();
-      setOrders((prev) => (append ? [...prev, ...data] : data));
-      setHasMore(data.length === limit);
-      setIsLoading(false);
-    } catch (err) {
-      console.error("Error fetching orders:", err.message);
-      toast.error("Failed to fetch orders!");
-      setIsLoading(false);
+  const fetchOrders = useCallback(async (pageNum, append = false) => {const fetchOrders = useCallback(async (pageNum, append = false) => {
+  try {
+    const res = await fetch(`https://6804a7f279cb28fb3f5b7c04.mockapi.io/orders?page=${pageNum}&limit=${limit}`);
+    if (!res.ok) {
+      throw new Error(`HTTP error! Status: ${res.status}`);
     }
-  }, []);
+    const data = await res.json();
+    setOrders((prev) => (append ? [...prev, ...data] : data));
+    setHasMore(data.length === limit);
+    setIsLoading(false);
+  } catch (err) {
+    console.error("Error fetching orders:", err.message);
+    toast.error("Failed to fetch orders!");
+    setIsLoading(false);
+  }
+}, []);
+
 
   useEffect(() => {
     fetchOrders(1);
