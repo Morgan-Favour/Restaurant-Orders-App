@@ -93,46 +93,51 @@ export default function App() {
           </div>
         ) : (
           <Routes>
-            <Route
-              path="/"
-              element={
-                <div className="max-w-7xl mx-auto">
-                  {/* Filter and Sort Controls */}
-                  <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 bg-white p-4 rounded-lg shadow-md">
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
-                      <label className="text-sm font-semibold text-gray-700">Filter by Status:</label>
-                      <select
-                        value={filterStatus}
-                        onChange={(e) => handleFilterChange(e.target.value)}
-                        className="border border-gray-300 rounded-lg px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                      >
-                        <option value="All">All</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Preparing">Preparing</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Completed">Completed</option>
-                      </select>
-                    </div>
+            // Inside the Routes in App.js
+<Route
+  path="/"
+  element={
+    <div className="max-w-7xl mx-auto">
+      <OrderForm onOrderAdded={(newOrder) => setOrders((prev) => [newOrder, ...prev])} />
+      {/* Filter and Sort Controls */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 bg-white p-4 rounded-lg shadow-md">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <label className="text-sm font-semibold text-gray-700">Filter by Status:</label>
+          <select
+            value={filterStatus}
+            onChange={(e) => handleFilterChange(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+          >
+            <option value="All">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Preparing">Preparing</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
 
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
-                      <label className="text-sm font-semibold text-gray-700">Sort by:</label>
-                      <select
-                        value={sortBy}
-                        onChange={(e) => handleSortChange(e.target.value)}
-                        className="border border-gray-300 rounded-lg px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                      >
-                        <option value="time">Time</option>
-                        <option value="date">Date</option>
-                      </select>
-                    </div>
-                  </div>
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <label className="text-sm font-semibold text-gray-700">Sort by:</label>
+          <select
+            value={sortBy}
+            onChange={(e) => handleSortChange(e.target.value)}
+            className="border border-gray-300 rounded-lg px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+          >
+            <option value="time">Time</option>
+            <option value="date">Date</option>
+          </select>
+        </div>
+      </div>
 
-                  <OrderList
-                    orders={filteredOrders}
-                    setOrders={setOrders}
-                    loadMore={loadMoreOrders}
-                    hasMore={hasMore}
-                  />
+      <OrderList
+        orders={filteredOrders}
+        setOrders={setOrders}
+        loadMore={loadMoreOrders}
+        hasMore={hasMore}
+      />
+    </div>
+  }
+/>
                 </div>
               }
             />
