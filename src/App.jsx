@@ -8,29 +8,28 @@ import OrderDetails from "./components/OrderDetails";
 export default function App() {
   const [orders, setOrders] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
-  const [sortBy, setSortBy] = useState(["time", "date"]);
+  const [sortBy, setSortBy] = useState("date"); // Changed to string since sortBy is a single value
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const limit = 10; // Number of orders per page
 
-  const fetchOrders = useCallback(async (pageNum, append = false) => {const fetchOrders = useCallback(async (pageNum, append = false) => {
-  try {
-    const res = await fetch(`https://6804a7f279cb28fb3f5b7c04.mockapi.io/orders?page=${pageNum}&limit=${limit}`);
-    if (!res.ok) {
-      throw new Error(`HTTP error! Status: ${res.status}`);
+  const fetchOrders = useCallback(async (pageNum, append = false) => {
+    try {
+      const res = await fetch(`https://6804a7f279cb28fb3f5b7c04.mockapi.io/orders?_page=${pageNum}&_limit=${limit}`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const data = await res.json();
+      setOrders((prev) => (append ? [...prev, ...data] : data));
+      setHasMore(data.length === limit);
+      setIsLoading(false);
+    } catch (err) {
+      console.error("Error fetching orders:", err.message);
+      toast.error("Failed to fetch orders!");
+      setIsLoading(false);
     }
-    const data = await res.json();
-    setOrders((prev) => (append ? [...prev, ...data] : data));
-    setHasMore(data.length === limit);
-    setIsLoading(false);
-  } catch (err) {
-    console.error("Error fetching orders:", err.message);
-    toast.error("Failed to fetch orders!");
-    setIsLoading(false);
-  }
-}, []);
-
+  }, []);
 
   useEffect(() => {
     fetchOrders(1);
@@ -71,10 +70,10 @@ export default function App() {
       result = result.filter((order) => order.status === filterStatus);
     }
 
-    // Sort by time
+    // Sort by time or date
     if (sortBy === "time") {
       result.sort((a, b) => new Date(`1970-01-01 ${b.time}`) - new Date(`1970-01-01 ${a.time}`));
-    }else if (sortBy === "date") {
+    } else if (sortBy === "date") {
       result.sort((a, b) => new Date(b.date) - new Date(a.date));
     }
 
@@ -103,7 +102,7 @@ export default function App() {
                     <div className="flex items-center gap-2 w-full sm:w-auto">
                       <label className="text-sm font-semibold text-gray-700">Filter by Status:</label>
                       <select
-                        defaultValue={filterStatus}
+                        value={filterStatus}
                         onChange={(e) => handleFilterChange(e.target.value)}
                         className="border border-gray-300 rounded-lg px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                       >
@@ -118,7 +117,7 @@ export default function App() {
                     <div className="flex items-center gap-2 w-full sm:w-auto">
                       <label className="text-sm font-semibold text-gray-700">Sort by:</label>
                       <select
-                        defaultValue={sortBy}
+                        value={sortBy}
                         onChange={(e) => handleSortChange(e.target.value)}
                         className="border border-gray-300 rounded-lg px-3 py-2 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                       >
