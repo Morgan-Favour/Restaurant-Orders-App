@@ -98,6 +98,9 @@
   }
   
   @media (min-width: 768px) {
+      .title {
+    font-size: 1.5rem;
+      }
     .filter-sort-container {
       flex-direction: row;
       justify-content: space-between;
